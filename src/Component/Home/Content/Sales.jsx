@@ -3,6 +3,7 @@ import styles from "./Content.module.css";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { boolean } from "yup";
 const Sales = ({ data, loading, fetchError, search }) => {
   const filteredItems = useMemo(() => {
     return data.filter((item) => {
@@ -104,7 +105,16 @@ const Sales = ({ data, loading, fetchError, search }) => {
                   </p>
 
                   <div className={styles.priceIconSale}>
-                    <p>
+                    <p
+                      style={
+                        !boolean(item.isActive)
+                          ? {
+                              textDecoration: "line-through",
+                              textDecorationColor: "red",
+                            }
+                          : null
+                      }
+                    >
                       متاح الان <FaShoppingCart />
                     </p>
                     <p>

@@ -3,6 +3,7 @@ import styles from "./Content.module.css";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { boolean } from "yup";
 
 // eslint-disable-next-line react/prop-types
 const Favourite = ({ search }) => {
@@ -64,7 +65,16 @@ const Favourite = ({ search }) => {
                 </p>
 
                 <div className={styles.priceIconFav}>
-                  <p>
+                  <p
+                    style={
+                      !boolean(item.isActive)
+                        ? {
+                            textDecoration: "line-through",
+                            textDecorationColor: "red",
+                          }
+                        : null
+                    }
+                  >
                     متاح الان <FaShoppingCart />
                   </p>
                   <p>
@@ -76,7 +86,8 @@ const Favourite = ({ search }) => {
                       }}
                       onClick={() => handleDeleteFav(item)}
                     />
-                    <span style={{ color: "#000" }}>السعر</span>: {item.price}
+                    <span style={{ color: "#000" }}>السعر</span>:{" "}
+                    {Number(item.price) - Number(item.discount)}
                   </p>
                 </div>
               </div>

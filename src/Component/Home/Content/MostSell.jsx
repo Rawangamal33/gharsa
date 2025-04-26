@@ -3,6 +3,7 @@ import styles from "./Content.module.css";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { boolean } from "yup";
 
 const MostSell = ({ data, search, loading, fetchError }) => {
   const filteredData = useMemo(() => {
@@ -106,7 +107,16 @@ const MostSell = ({ data, search, loading, fetchError }) => {
                   </p>
 
                   <div className={styles.priceIconMost}>
-                    <p>
+                    <p
+                      style={
+                        !boolean(item.isActive)
+                          ? {
+                              textDecoration: "line-through",
+                              textDecorationColor: "red",
+                            }
+                          : null
+                      }
+                    >
                       متاح الان <FaShoppingCart />
                     </p>
                     <p>

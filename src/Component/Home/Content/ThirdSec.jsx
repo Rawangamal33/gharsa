@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import styles from "./Content.module.css";
 import { FaShoppingCart } from "react-icons/fa";
+import { boolean } from "yup";
 
 const ThirdSec = ({ data, search }) => {
   const filteredItems = data.filter((item) => {
@@ -42,7 +43,16 @@ const ThirdSec = ({ data, search }) => {
                 </p>
 
                 <div className={styles.priceIconSale}>
-                  <p>
+                  <p
+                    style={
+                      !boolean(item.isActive)
+                        ? {
+                            textDecoration: "line-through",
+                            textDecorationColor: "red",
+                          }
+                        : null
+                    }
+                  >
                     متاح الان <FaShoppingCart />
                   </p>
                   <p>

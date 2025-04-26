@@ -3,6 +3,7 @@ import styles from "./Content.module.css";
 import { CiStar } from "react-icons/ci";
 import { FaShoppingCart } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { boolean } from "yup";
 
 const FirstSec = ({ search }) => {
   const [favourites, setFavourites] = useState([]);
@@ -51,11 +52,21 @@ const FirstSec = ({ search }) => {
                 </p>
 
                 <div className={styles.priceIconFav}>
-                  <p>
+                  <p
+                    style={
+                      !boolean(item.isActive)
+                        ? {
+                            textDecoration: "line-through",
+                            textDecorationColor: "red",
+                          }
+                        : null
+                    }
+                  >
                     متاح الان <FaShoppingCart />
                   </p>
                   <p>
-                    <span style={{ color: "#000" }}>السعر</span>: {item.price}
+                    <span style={{ color: "#000" }}>السعر</span>:{" "}
+                    {Number(item.price) - Number(item.discount)}
                   </p>
                 </div>
               </div>

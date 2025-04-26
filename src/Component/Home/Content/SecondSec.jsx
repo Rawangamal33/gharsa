@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./Content.module.css";
 import { NavLink } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
+import { boolean } from "yup";
 
 const SecondSec = ({ data, search }) => {
   const filteredData = data.filter((item) => {
@@ -43,7 +44,16 @@ const SecondSec = ({ data, search }) => {
                 </p>
 
                 <div className={styles.priceIconMost}>
-                  <p>
+                  <p
+                    style={
+                      !boolean(item.isActive)
+                        ? {
+                            textDecoration: "line-through",
+                            textDecorationColor: "red",
+                          }
+                        : null
+                    }
+                  >
                     متاح الان <FaShoppingCart />
                   </p>
                   <p>

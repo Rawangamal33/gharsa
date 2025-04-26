@@ -7,6 +7,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import useFetchAllData from "./useFetchAllData";
 import { useContext } from "react";
 import { CartContext } from "../../Context/CartProvider";
+import { boolean } from "yup";
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
 const ProductDetails = () => {
@@ -117,7 +118,7 @@ const ProductDetails = () => {
                           fontWeight: "700",
                         }}
                       >
-                        {one.price}
+                        {Number(one.price) - Number(one.discount)}
                       </p>
                       <p
                         style={{
@@ -220,7 +221,7 @@ const ProductDetails = () => {
                       fontWeight: "700",
                     }}
                   >
-                    pounds {one.price}
+                    pounds {Number(one.price) - Number(one.discount)}
                   </p>
                 </div>
               </div>
@@ -255,11 +256,21 @@ const ProductDetails = () => {
                   </p>
 
                   <div className={styles.priceIconMost}>
-                    <p>
+                    <p
+                      style={
+                        !boolean(item.isActive)
+                          ? {
+                              textDecoration: "line-through",
+                              textDecorationColor: "red",
+                            }
+                          : null
+                      }
+                    >
                       متاح الان <FaShoppingCart />
                     </p>
                     <p>
-                      <span style={{ color: "#000" }}>السعر</span>: {item.price}
+                      <span style={{ color: "#000" }}>السعر</span>:{" "}
+                      {Number(item.price) - Number(item.discount)}
                     </p>
                   </div>
                 </div>

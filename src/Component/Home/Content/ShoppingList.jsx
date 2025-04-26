@@ -8,6 +8,7 @@ import useFetchAllData from "./useFetchAllData";
 import { FaShoppingCart } from "react-icons/fa";
 import { CiSquarePlus } from "react-icons/ci";
 import { CiSquareMinus } from "react-icons/ci";
+import { boolean } from "yup";
 
 const ShoppingList = ({ search }) => {
   const { data } = useFetchAllData();
@@ -151,7 +152,9 @@ const ShoppingList = ({ search }) => {
                           textAlign: "center",
                         }}
                       >
-                        ${item.price}
+                        $
+                        {(Number(item.price) - Number(item.discount)) *
+                          cart.find((one) => one.id === item.id)?.quantity}
                       </td>
                       <td
                         style={{
@@ -205,7 +208,13 @@ const ShoppingList = ({ search }) => {
           >
             <p>الاجمالي </p>
             <p>
-              :${searchedItemsCart.reduce((sum, item) => item.price + sum, 0)}
+              :$
+              {searchedItemsCart.reduce((sum, item) => {
+                const cartItem = cart.find((one) => one.id === item.id);
+
+                const quantity = cartItem && cartItem.quantity;
+                return item.price * quantity + sum;
+              }, 0)}
             </p>
           </div>
           <div
@@ -260,7 +269,16 @@ const ShoppingList = ({ search }) => {
                   </p>
 
                   <div className={styles.priceIconSale}>
-                    <p>
+                    <p
+                      style={
+                        !boolean(item.isActive)
+                          ? {
+                              textDecoration: "line-through",
+                              textDecorationColor: "red",
+                            }
+                          : null
+                      }
+                    >
                       متاح الان <FaShoppingCart />
                     </p>
                     <p>

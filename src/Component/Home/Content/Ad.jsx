@@ -36,7 +36,10 @@ const Ad = () => {
             marginTop: "30px",
           }}
         >
-          <NavLink to="لينك التطبيق  في الاخر" className={styles.fLink}>
+          <NavLink
+            to="https://www.apple.com/eg/app-store/"
+            className={styles.fLink}
+          >
             <div
               style={{
                 fontSize: "30px",
@@ -48,7 +51,10 @@ const Ad = () => {
             </div>
             <p>App Store</p>
           </NavLink>
-          <NavLink to="لينك التطبيق  في الاخر" className={styles.sLink}>
+          <NavLink
+            to="https://play.google.com/store/apps?hl=en&pli=1"
+            className={styles.sLink}
+          >
             <img src={googleIcon} alt="App Store" width="50" />
             <p
               style={{

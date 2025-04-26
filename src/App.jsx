@@ -1,8 +1,13 @@
 // eslint-disable-next-line no-unused-vars
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { Toaster } from "sonner";
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router";
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  RouterProvider,
+} from "react-router";
 import Admin from "./pages/Admin";
 import Orders from "./admin/orders/Orders";
 import Salers from "./admin/salers/Salers";
@@ -30,6 +35,8 @@ import ProductDetails from "./Component/Home/Content/ProductDetails";
 import CartPage from "./Component/Home/Content/CartPage";
 import CartProvider from "./Component/Context/CartProvider";
 import ProfileOrder from "./Component/Home/Content/ProfileOrder";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserById } from "./redux/usersSlice";
 // import UserPage from "./PageUser/UserPage";
 // import UserAcount from "./user/UserAcount/UserAcount";
 // import UserSales from "./user/userSales/UserSales";
@@ -51,6 +58,22 @@ const Layout = () => {
   );
 };
 function App() {
+  const [userAdmin, setUserAdmin] = useState(false);
+  const dispatch = useDispatch();
+
+  const { user, userStatus } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (userStatus === "idle") {
+      dispatch(fetchUserById());
+    }
+  }, [dispatch, userStatus]);
+
+  if (userStatus === "succeeded") {
+    if (user?.roles?.includes("Admin")) {
+      setUserAdmin(true);
+    }
+  }
   const router = createBrowserRouter([
     {
       path: "",
@@ -96,10 +119,22 @@ function App() {
             { path: "orders", element: <Orders /> },
             { path: "order/:id", element: <OrderDetails /> },
             { path: "sales", element: <Sales /> },
-            { path: "saler", element: <Salers /> },
-            { path: "categories", element: <Categories /> },
-            { path: "all-products", element: <AllProducts /> },
-            { path: "account", element: <Acount /> },
+            {
+              path: "saler",
+              element: userAdmin ? <Salers /> : <Navigate to="admin" />,
+            },
+            {
+              path: "categories",
+              element: userAdmin ? <Categories /> : <Navigate to="/admin" />,
+            },
+            {
+              path: "all-products",
+              element: userAdmin ? <AllProducts /> : <Navigate to="/admin" />,
+            },
+            {
+              path: "account",
+              element: userAdmin ? <Acount /> : <Navigate to="/admin" />,
+            },
 
             // Add your routes here.
             // {path: "/about", element: <About />}

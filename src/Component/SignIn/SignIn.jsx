@@ -1,4 +1,5 @@
 import { useFormik } from "formik";
+import { jwtDecode } from "jwt-decode";
 import * as Yup from "yup";
 import { useContext, useState } from "react";
 import axios from "axios";
@@ -6,7 +7,6 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { TokenContext } from "../Context/TokenContext";
 import image from "../../assets/Rectangle 62.png";
 // import imgbackground from "../../assets/happy-plant-parents-holding-their-potted-plants-2023-11-27-05-29-06-utc (1) 1.png"
-
 
 export default function SignIn() {
   const { setToken } = useContext(TokenContext);
@@ -59,6 +59,12 @@ export default function SignIn() {
       );
 
       if (response.data) {
+        const decodedToken = decodeToken(response.data.token);
+        const nameIdentifier =
+          decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+          ];
+        localStorage.setItem("nameIdentifier", nameIdentifier);
         const userData = response.data; // بيانات المستخدم المرجعة من الـ API
         setLoading(true);
         localStorage.setItem("userToken", response.data.token); // حفظ التوكن
@@ -72,7 +78,7 @@ export default function SignIn() {
         ) {
           navigate("/admin"); // توجيه المستخدم إلى صفحة Admin
         } else {
-          navigate("/user"); // توجيه المستخدم إلى صفحة User
+          navigate("/admin"); // توجيه المستخدم إلى صفحة User
         }
       }
     } catch (error) {
@@ -85,6 +91,14 @@ export default function SignIn() {
       setLoading(true);
     }
   }
+  const decodeToken = (authToken) => {
+    try {
+      const decoded = jwtDecode(authToken);
+      return decoded;
+    } catch {
+      return null;
+    }
+  };
 
   return (
     <div
@@ -114,9 +128,17 @@ export default function SignIn() {
           className="bg-light px-4 rounded-pill navbar navbar-expand-lg "
           style={{ width: "48%" }}
         >
-          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span className="navbar-toggler-icon"></span>
-  </button>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav d-flex list-unstyled m-0 justify-content-between w-100">
               <li className="nav-item">

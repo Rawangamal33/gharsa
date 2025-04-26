@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import img2 from "../../assets/Rectangle 62.png";
-import imgbackground from "../../assets/0599f0f621342c590de5656ae157af40.jfif"
+import imgbackground from "../../assets/0599f0f621342c590de5656ae157af40.jfif";
 
 export default function ForgetPassword() {
   const [errMsg, setErr] = useState("");

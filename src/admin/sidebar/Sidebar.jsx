@@ -2,7 +2,31 @@ import { NavLink } from "react-router";
 import styles from "./sidebar.module.scss";
 import { logo } from "../../assets";
 import { RiLogoutCircleRLine } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useMemo, useState } from "react";
+import { fetchUserById } from "../../redux/usersSlice";
 const Sidebar = () => {
+  const [userAdmin, setUserAdmin] = useState(false);
+  const dispatch = useDispatch();
+
+  const { user, userStatus } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (userStatus === "idle") {
+      dispatch(fetchUserById());
+    }
+  }, [dispatch, userStatus]);
+
+  if (userStatus === "loading") {
+    return <p>Loading....</p>;
+  }
+
+  if (userStatus === "succeeded") {
+    if (user?.roles?.includes("Admin")) {
+      setUserAdmin(true);
+    }
+  }
+
   return (
     <div className={styles["sidebar-container"]}>
       <div className={styles.logo}>
@@ -42,42 +66,50 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink
-              to="/admin/categories"
-              className={({ isActive }) => (isActive ? styles.active : "")}
-            >
-              <span>الفئات</span>
-            </NavLink>
+            {userAdmin && (
+              <NavLink
+                to="/admin/categories"
+                className={({ isActive }) => (isActive ? styles.active : "")}
+              >
+                <span>الفئات</span>
+              </NavLink>
+            )}
           </li>
           <li>
-            <NavLink
-              to="/admin/saler"
-              className={({ isActive }) => (isActive ? styles.active : "")}
-            >
-              <span>البائعين</span>
-            </NavLink>
+            {userAdmin && (
+              <NavLink
+                to="/admin/saler"
+                className={({ isActive }) => (isActive ? styles.active : "")}
+              >
+                <span>البائعين</span>
+              </NavLink>
+            )}
           </li>
           <li>
-            <NavLink
-              to="/admin/all-products"
-              className={({ isActive }) => (isActive ? styles.active : "")}
-            >
-              <span>المنتجات</span>
-            </NavLink>
+            {userAdmin && (
+              <NavLink
+                to="/admin/all-products"
+                className={({ isActive }) => (isActive ? styles.active : "")}
+              >
+                <span>المنتجات</span>
+              </NavLink>
+            )}
           </li>
           <li>
-            <NavLink
-              to="/admin/account"
-              className={({ isActive }) => (isActive ? styles.active : "")}
-            >
-              <span>البروفيل</span>
-            </NavLink>
+            {userAdmin && (
+              <NavLink
+                to="/admin/account"
+                className={({ isActive }) => (isActive ? styles.active : "")}
+              >
+                <span>البروفيل</span>
+              </NavLink>
+            )}
           </li>
         </ul>
 
         <div className={styles["logout"]}>
           <button className="--btn">تسجيل الخروج</button>
-          <RiLogoutCircleRLine color=""/>
+          <RiLogoutCircleRLine color="" />
         </div>
       </div>
     </div>

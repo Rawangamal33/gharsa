@@ -19,9 +19,7 @@ body {
   text-align: right;
   font-family: var(--main-font);
 }
-body::-webkit-scrollbar{
-  display: none;
-}
+
 
 ul{
   list-style: none;
